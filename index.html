@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="input.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>ios calculator</title>
+    <style>
+        button {
+            height: 50px;
+            width: 50px;
+            border: 2px solid white;
+            background-color: #555555;
+            border-radius: 50%;
+
+
+        }
+
+        .operator {
+            background-color: rgba(245, 245, 33, 0.676);
+            color: white;
+        }
+
+        .gray {
+            background-color: rgba(128, 128, 128, 0.979);
+            color: black;
+        }
+
+        .zero {
+            grid-column: span 2;
+            border-radius: 20px;
+            width: 139px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="display" class=" bg-black h-48 w-96 text-white text-3xl text-end pr-14 pt-32">
+
+    </div>
+    <div class="container grid grid-cols-4 gap-2 bg-black h-fit w-96 text-white p-2">
+        <button class="gray">AC</button>
+        <button class="gray">+/-</button>
+        <button class="gray">%</button>
+        <button class="operator">/</button>
+
+        <button id="7">7</button>
+        <button id="8">8</button>
+        <button id="9">9</button>
+        <button id="x" class="operator">x</button>
+
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button class="operator">-</button>
+
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button class="operator">+</button>
+
+
+        <button class="zero">0</button>
+        <button>.</button>
+        <button class="operator">=</button>
+
+
+
+
+    </div>
+
+
+
+</body>
+<script>
+    let currentNumber = '0';
+    let previousNumber = '';
+    let operator = '';
+    const buttons = document.querySelectorAll(".container button");
+    const display = document.querySelector("#display");
+
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const value = button.innerHTML;
+            
+            if (value >= '0' && value <= '9' || value === '.') {
+                handleNumber(value);
+            } else if (value === 'AC') {
+                handleClear();
+            } else if (value === '+/-') {
+                handlePlusMinus();
+            } else if (value === '%') {
+                handlePercentage();
+            } else if (value === '=') {
+                handleEquals();
+            } else {
+                handleOperator(value);
+            }
+
+            updateDisplay();
+        });
+    });
+
+    function handleNumber(num) {
+        // its taking the various inputs 
+            if (currentNumber === '0') {
+                currentNumber = num;
+            } else {
+                currentNumber += num;
+            }
+        }
+
+    function handleClear() {
+            currentNumber = '0';
+            previousNumber = '';
+            operator = '';
+        }
+
+        
+    function handlePlusMinus() {
+            currentNumber = (parseFloat(currentNumber) * -1).toString();
+        }
+
+    
+    function handlePercentage() {
+            currentNumber = (parseFloat(currentNumber) / 100).toString();
+        }
+
+            
+    function handleOperator(op) {
+            if (operator === '') {
+                previousNumber = currentNumber;
+                currentNumber = '0';
+            } else {
+                handleEquals();
+            }
+            operator = op;
+        }
+
+    
+
+        
+    function handleEquals() {
+            if (operator === '' || previousNumber === '') return;
+
+            let result;
+            const prev = parseFloat(previousNumber);
+            const curr = parseFloat(currentNumber);
+
+            switch (operator) {
+                case '+':
+                    result = prev + curr;
+                    break;
+                case '-':
+                    result = prev - curr;
+                    break;
+                case 'x':
+                    result = prev * curr;
+                    break;
+                case '/':
+                    result = prev / curr;
+                    break;
+            }
+
+            currentNumber = result.toString();
+            previousNumber = '';
+            operator = '';
+        }
+
+    function updateDisplay() {
+            display.innerHTML = currentNumber;
+        }
+
+
+
+
+      
+
+
+
+</script>
+
+</html>
